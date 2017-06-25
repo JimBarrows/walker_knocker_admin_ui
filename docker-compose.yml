@@ -1,0 +1,56 @@
+version: '3'
+services:
+  e-commerce-db:
+    image: erpmicroservices/e-commerce-db:latest
+    ports:
+      - "5432:5432"
+
+  party-db:
+    image: erpmicroservices/party-db:latest
+    ports:
+      - "5433:5432"
+
+  admin_api:
+    image: thejimbarrows/walker_knocker_admin_api
+    links:
+      - e-commerce-db
+      - party-db
+    labels:
+      - "traefik.backend=walker_knocker_admin_api"
+      - "traefik.frontend.rule=PathPrefixStrip:/api/walker_knocker/admin"
+      - "traefik.port=80"
+      - "traefik.frontend.entryPoints=http"
+
+  db_admin:
+    image: thajeztah/pgadmin4
+    ports:
+      - "5050:5050"
+    links:
+      - e-commerce-db
+      - party-db
+    labels:
+      - "traefik.backend=walker_knocker_db_admin"
+      - "traefik.frontend.rule=PathPrefixStrip:/db_admin"
+      - "traefik.port=80"
+      - "traefik.frontend.entryPoints=http"
+
+  admin_ui:
+    image: thejimbarrows/walker_knocker_admin_ui
+    build: .
+    volumes:
+      - "./web/public:/usr/share/nginx/html"
+    labels:
+      - "traefik.backend=walker_knocker_admin_ui"
+      - "traefik.frontend.rule=PathPrefixStrip:/admin"
+      - "traefik.port=80"
+      - "traefik.frontend.entryPoints=http"
+
+  traefik:
+    image: traefik
+    command: --web --docker --docker.domain=docker.localhost --logLevel=DEBUG
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dev/null:/traefik.toml

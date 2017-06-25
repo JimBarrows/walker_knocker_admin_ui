@@ -1,0 +1,3 @@
+rootProject.name = 'walker_knocker_admin_ui'
+
+include ':app'
