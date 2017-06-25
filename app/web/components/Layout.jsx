@@ -5,8 +5,10 @@ import constants from "../../constants";
 import React from "react";
 import {connect} from "react-redux";
 // import {logoutAndRedirect, openWebPreferenceTypes} from "../../actions";
-import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css"
-import "../../../node_modules/bootstrap/dist/css/bootstrap-theme.min.css"
+import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import "../../../node_modules/bootstrap/dist/css/bootstrap-theme.min.css";
+import "../../../node_modules/font-awesome/css/font-awesome.min.css";
+
 let {MESSAGE_CONTEXT_DANGER, MESSAGE_CONTEXT_INFO, MESSAGE_CONTEXT_SUCCESS, MESSAGE_CONTEXT_WARNING} = constants;
 
 class Layout extends React.Component {
