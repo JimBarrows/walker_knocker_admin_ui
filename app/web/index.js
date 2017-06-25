@@ -8,7 +8,7 @@ import { createBrowserHistory } from 'history';
 import Layout from "./components/Layout";
 // import requireAuthentication from "./components/AuthenticatedComponent";
 import store from "../store";
-import index from "./containers/index.js";
+import index from "./containers/AddressListContainer";
 import {client} from "../reducers";
 
 const history = syncHistoryWithStore(hashHistory, store);

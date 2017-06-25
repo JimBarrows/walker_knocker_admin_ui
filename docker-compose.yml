@@ -11,7 +11,7 @@ services:
       - "5433:5432"
 
   admin_api:
-    image: thejimbarrows/walker_knocker_admin_api
+    image: thejimbarrows/walker_knocker_admin_api:latest
     links:
       - e-commerce-db
       - party-db

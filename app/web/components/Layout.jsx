@@ -30,7 +30,7 @@ class Layout extends React.Component {
       auth,
       logout,
     } = this.props;
-    console.log("this.props: ", this.props);
+
     let message = "";
     let contextClass = "alert-info";
     switch (app.message.context) {

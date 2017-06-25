@@ -1,0 +1,8 @@
+{ addresses
+  { id
+    street_address
+    directions
+    city { id name abbreviation }
+    state {id name abbreviation }
+    zip_code { id name abbreviation }
+    country { id name abbreviation } }}
