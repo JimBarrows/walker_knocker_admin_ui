@@ -22,10 +22,11 @@ class AddressListContainer extends React.Component {
 	}
 
 	render( ) {
-		let list = [ ];
+		let {list} = this.props;
+
 		let main_display = list.loading
 			 ? <p>Still loading....</p>
-			: <AddressList id='AddressListPage' formComponent={this.form_component.bind( this )} list={list} extractItem={this.extract_item.bind( this )} remove={this.props.delete_address.bind( this )} update={this.update.bind( this )} viewerComponent={this.view_component.bind( this )}/>;
+			: <AddressList list={list.addresses} />;
 
 		return (
 			<div id="AddressListPage">
