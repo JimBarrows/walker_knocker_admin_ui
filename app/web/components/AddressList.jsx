@@ -9,7 +9,7 @@ class AddressList extends ItemList {
     let {list} =  this.props;
     let rows = <tr><td colSpan="4">There are no addresses</td></tr>;
     if( list && list.length > 0) {
-      rows = list.map((item, index) => <AddressRow item={item} key={index}/>);
+      rows = list.map((item, index) => <AddressRow allowEditing={true} item={item} key={index} save={this.save}/>);
     }
 		return (
 			<StripedTable id='AddressList'>
@@ -19,6 +19,7 @@ class AddressList extends ItemList {
 						<th>City</th>
 						<th>State</th>
 						<th>Zip Code</th>
+            <th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -27,5 +28,9 @@ class AddressList extends ItemList {
 			</StripedTable>
 		);
 	}
+
+  save( item) {
+    console.log("saving: ", item);
+  }
 }
 export default AddressList;
