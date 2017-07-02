@@ -13,36 +13,59 @@ let { DISPLAY_MESSAGE, MESSAGE_CONTEXT_DANGER } = constants;
 
 class AddressListContainer extends React.Component {
 
-	form_component( ) {
-		return <h2>Form Component</h2>
+	componentWillMount( ) {
+		this.propsToState( this.props );
 	}
 
-	extract_item( ) {
-		return { };
+	componentWillReceiveProps( nextProps ) {
+		this.propsToState( nextProps );
+	}
+
+	new_item(id) {
+		return {
+			id: "new_" + id,
+			street_address: "",
+			city: {
+				name: ""
+			},
+			state: {
+				abbreviation: ""
+			},
+			zip_code: {
+				name: ""
+			}
+		}
+	}
+	propsToState( props ) {
+		let { list } = props;
+		this.setState({ list });
+	}
+
+	remove_item( item ) {
+		console.log( "remove_item: ", item );
 	}
 
 	render( ) {
-		let {list} = this.props;
+		let { list } = this.state;
 
 		let main_display = list.loading
-			 ? <p>Still loading....</p>
-			: <AddressList list={list.addresses} />;
+			? <p>Still loading....</p>
+			: <AddressList list={list.addresses} new_item={this.new_item.bind(this)} save_item={this.save_item.bind( this )} remove_item={this.remove_item.bind( this )}/>;
 
 		return (
 			<div id="AddressListPage">
 				<PageHeader id="AddressListPage">
 					<h1>Address List</h1>
 				</PageHeader>
-        {main_display}
+				{main_display}
 			</div>
 		);
 	}
 
-  update() {}
+	save_item( item ) {
+		console.log( "save_item: ", item );
+	}
 
-  view_component() {
-    return <h2>view_component</h2>;
-  }
 }
 
 let create_gql_options = {
@@ -51,16 +74,16 @@ let create_gql_options = {
 		create_ql: ( item ) => create({
 			variables: {
 				street_address: item.street_address,
-        directions: item.directions,
-        city_id: item.city_id,
-        state_id: item.state_id,
-        zip_code_id: item.zip_code_id,
-        country_id: item.country_id
+				directions: item.directions,
+				city_id: item.city_id,
+				state_id: item.state_id,
+				zip_code_id: item.zip_code_id,
+				country_id: item.country_id
 			},
 			optimisticResponse: {
 				"create_function_type": {
-          street_address: item.street_address,
-          directions: item.directions,
+					street_address: item.street_address,
+					directions: item.directions,
 					"__typename": "FunctionType"
 				}
 			},
@@ -84,11 +107,11 @@ let list_gql_options = {
 }
 
 let update_gql_options = {
-  name: "update_address"
+	name: "update_address"
 }
 
 let delete_gql_options = {
-  name: "delete_address"
+	name: "delete_address"
 }
 
 let graphgql_list = [
@@ -108,4 +131,4 @@ export default connect(state => ({ }), dispatch => ({
 			message: message.message
 		}
 	})
-}))(AddressListContainerWithGql);
+}))( AddressListContainerWithGql );
