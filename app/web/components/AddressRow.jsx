@@ -19,9 +19,14 @@ class AddressRow extends React.Component {
 	}
 
 	editor( item ) {
-		return <AddressRowEditor item={item} row_controls={this.row_controls}/>
+		return <AddressRowEditor item={item} row_controls={this.row_controls} onItemChange={this.onItemChange.bind(this)}/>
 	}
 
+	onItemChange(item) {
+		this.setState({
+			item
+		});
+	}
 	remove() {
 			this.props.remove(this.state.item);
 	}
@@ -39,6 +44,7 @@ class AddressRow extends React.Component {
 	}
 
 	save( ) {
+		console.log("this.state: ", this.state);
 		this.setState({ editing: false });
 		this.props.save( this.state.item );
 	}

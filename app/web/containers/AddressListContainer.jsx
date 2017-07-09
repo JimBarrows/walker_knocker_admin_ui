@@ -21,7 +21,7 @@ class AddressListContainer extends React.Component {
 		this.propsToState( nextProps );
 	}
 
-	new_item(id) {
+	new_item( id ) {
 		return {
 			id: "new_" + id,
 			street_address: "",
@@ -50,7 +50,7 @@ class AddressListContainer extends React.Component {
 
 		let main_display = list.loading
 			? <p>Still loading....</p>
-			: <AddressList list={list.addresses} new_item={this.new_item.bind(this)} save_item={this.save_item.bind( this )} remove_item={this.remove_item.bind( this )}/>;
+			: <AddressList list={list.addresses} new_item={this.new_item.bind( this )} save_item={this.save_item.bind( this )} remove_item={this.remove_item.bind( this )}/>;
 
 		return (
 			<div id="AddressListPage">
@@ -63,43 +63,17 @@ class AddressListContainer extends React.Component {
 	}
 
 	save_item( item ) {
-		console.log( "save_item: ", item );
+		console.log( "save item: ", item );
+		if (item.id.startsWith( "new" )) {
+			delete item.id ;
+			this.props.create( {variables: {newAddress: item}} );
+		}
 	}
 
 }
 
 let create_gql_options = {
-	name: 'create_address',
-	props: ({ create }) => ({
-		create_ql: ( item ) => create({
-			variables: {
-				street_address: item.street_address,
-				directions: item.directions,
-				city_id: item.city_id,
-				state_id: item.state_id,
-				zip_code_id: item.zip_code_id,
-				country_id: item.country_id
-			},
-			optimisticResponse: {
-				"create_function_type": {
-					street_address: item.street_address,
-					directions: item.directions,
-					"__typename": "FunctionType"
-				}
-			},
-			updateQueries: {
-				"function_types": (prev, { mutationResult }) => {
-					let newType = mutationResult.data.create_function_type;
-					return Object.assign({}, prev, {
-						function_types: [
-							...prev.function_types,
-							newType
-						]
-					});
-				}
-			}
-		})
-	})
+	name: 'create'
 }
 
 let list_gql_options = {
