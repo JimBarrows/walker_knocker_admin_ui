@@ -14,7 +14,7 @@ class AddressList extends ItemList {
 		let rows = list
 			? list.map( ( item, index ) => <Address item={item} key={index} save={this.updateItem.bind( this )}/> ) : <h2>There are no addresses in the system</h2>;
 		return (
-			<div id="AddressList">
+			<div id="AddressList" class="list-group">
 				{button}
 				{rows}
 			</div>

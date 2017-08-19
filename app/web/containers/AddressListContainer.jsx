@@ -13,20 +13,16 @@ let { DISPLAY_MESSAGE, MESSAGE_CONTEXT_DANGER } = constants;
 
 class AddressListContainer extends React.Component {
 
-	onListChange(changed_list) {
-		this.setState({
-			list:{
-				addresses: changed_list
-			}
-		})
+	addItem( item ) {
+		this.props.createQl( item );
 	}
 
 	render( ) {
-		let {list} = this.props;
+		let { list } = this.props;
 
 		let main_display = list.loading
 			? <p>Still loading....</p>
-			: <AddressList allowEditing={true} list={list.addresses} onListChange={this.onListChange.bind(this)}/>;
+			: <AddressList allowEditing={true} list={list.addresses} addItem={this.addItem.bind( this )}/>;
 
 		return (
 			<div id="AddressListPage">
@@ -47,13 +43,34 @@ const mapDispatchToProps = ( dispatch ) => {
 	return { };
 };
 
-// export default connect( mapStateToProps, mapDispatchToProps )( AddressListContainer );
+let create_gql_options = {
+	name: 'create',
+	props: ({ create }) => ({
+		createQl: ( item ) => create({
+			variables: {
+				newAddress: {
+					street_address: item.street_address,
+					city_id: item.city.id,
+					state_id: item.state.id,
+					zip_code_id: item.zip_code.id,
+					country_id: ''
+				}
+			},
+			updateQueries: {
+				"function_types": (prev, { mutationResult }) => {
+					let newType = mutationResult.data.create_function_type;
+					return Object.assign({}, prev, {
+						function_types: [
+							...prev.function_types,
+							newType
+						]
+					});
+				}
+			}
+		})
+	})
+}
 
-//
-// let create_gql_options = {
-// 	name: 'create'
-// }
-//
 let list_gql_options = {
 	name: "list"
 }
@@ -68,9 +85,9 @@ let list_gql_options = {
 //
 let graphgql_list = [
 	graphql( list_gql, list_gql_options ),
-// 	graphql( create_gql, create_gql_options ),
-// 	graphql( update_gql, update_gql_options ),
-// 	graphql( delete_gql, delete_gql_options )
+	graphql( create_gql, create_gql_options ),
+	// 	graphql( update_gql, update_gql_options ),
+	// 	graphql( delete_gql, delete_gql_options )
 ];
 //
 const AddressListContainerWithGql = compose( ...graphgql_list )( AddressListContainer );

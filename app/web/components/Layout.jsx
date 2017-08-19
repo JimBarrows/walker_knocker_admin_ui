@@ -8,6 +8,7 @@ import {connect} from "react-redux";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../../../node_modules/bootstrap/dist/css/bootstrap-theme.min.css";
 import "../../../node_modules/font-awesome/css/font-awesome.min.css";
+import "../../../node_modules/bootstrap/dist/js/bootstrap.min.js";
 
 let {MESSAGE_CONTEXT_DANGER, MESSAGE_CONTEXT_INFO, MESSAGE_CONTEXT_SUCCESS, MESSAGE_CONTEXT_WARNING} = constants;
 

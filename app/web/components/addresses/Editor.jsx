@@ -1,17 +1,19 @@
 import React from "react";
 import { ItemEditor } from "react-templates-and-utils";
 import { SelectFormGroup } from "bootstrap-react-components";
+import Autocomplete from "../autocomplete";
 
 class Editor extends ItemEditor {
 
-  city_change( e ) {
+  city_change( city_name ) {
     this.setState({
       city: {
-        id: e.target.selectedOptions[0].value,
-        name: e.target.selectedOptions[0].label
+        id: city_name,
+        name: city_name
       }
     });
   }
+
 	propsToState( props ) {
 		let {
 			id = 'new',
@@ -51,7 +53,10 @@ class Editor extends ItemEditor {
 			}, {
 				id: 2,
 				name: "Tucson"
-			}
+			}, {
+        id:3,
+        name: "Philadelphia"
+      }
 		]
 		let state_options = [
 			{
@@ -77,10 +82,7 @@ class Editor extends ItemEditor {
 			<div id={id} class="address">
 				<div><input class="form-control" id={"street_address_" + id} onChange={this.street_address_change.bind( this )} required={true} type="text" value={street_address}/></div>
 				<div>
-					<select class="form-control" id={'city_select_' + id} onChange={this.city_change.bind( this )}>
-						<option value="-1"></option>
-						{city_options.map( o => <option key={o.id} value={o.id}>{o.name}</option>)}
-					</select>
+          <Autocomplete id={'city_select_' + id} onChange={this.city_change.bind(this)} options={city_options.map(city => ({value: city.id, label: city.name}))} selected={city.name}/>
 				</div>
 				<div>
 					<select class="form-control" id={'state_select_' + id} onChange={this.state_change.bind( this )}>
