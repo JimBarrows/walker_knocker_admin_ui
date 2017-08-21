@@ -1,41 +1,40 @@
 import React from "react";
 import { connect } from "react-redux";
 import { compose, gql, graphql } from 'react-apollo';
-import { EditableList, NumberFormGroup, PageHeader, TextFormGroup } from "bootstrap-react-components";
+import { EditableList, FormGroup, NumberFormGroup, PageHeader, TextFormGroup } from "bootstrap-react-components";
+import CityFormGroup from "../components/CityFormGroup";
 import constants from "../../constants";
-import AddressList from "../components/addresses";
 import create_gql from "../../graphql/address/create.graphql";
 import list_gql from "../../graphql/address/list.graphql";
 import update_gql from "../../graphql/address/update.graphql";
 import delete_gql from "../../graphql/address/delete.graphql";
 
 let { DISPLAY_MESSAGE, MESSAGE_CONTEXT_DANGER } = constants;
-let foo = NumberFormGroup;
 class AddressListContainer extends React.Component {
 
-	// addItem( item ) {
-	// 	this.props.createQl( item );
-	// }
-
-	addListItem( item) {
-		let id = this.state.list.length + 1;
-		this.setState({
-			current: null,
-			list: [
-				...this.state.list, {
-					id,
-					name: item.name,
-					age: item.age
-				}
-			]
-		});
+	addListItem( item ) {
+		this.props.createQl( item );
 	}
+
+	// addListItem( item) {
+	// 	let id = this.state.list.length + 1;
+	// 	this.setState({
+	// 		current: null,
+	// 		list: [
+	// 			...this.state.list, {
+	// 				id,
+	// 				name: item.name,
+	// 				age: item.age
+	// 			}
+	// 		]
+	// 	});
+	// }
 
 	body( item ) {
 		return <div class="vcard adr">
-			<span class="street-address">{item.street_address}</span>
-			<span class="locality">{item.city.name}</span>
-			<span class="region">{item.state.name}</span>
+			<span class="street-address">{item.street_address}</span><br/>
+			<span class="locality">{item.city.name}</span>,&nbsp;
+			<span class="region">{item.state.name}</span>&nbsp;
 			<span class="postal-code">{item.zip_code.name}</span>
 		</div>
 	}
@@ -43,15 +42,14 @@ class AddressListContainer extends React.Component {
 	constructor( props ) {
 		super( props );
 		this.state = {
-			list: [],
 			current: null
 		}
 	}
 
 	formElements( item ) {
 		return <div class="formElements">
-			<TextFormGroup id="street_address" label="Street Address" value={item.street_address}/>
-			<TextFormGroup id="name" label="Name" value={item.street_address}/>
+			<TextFormGroup id="street_address" label="Street Address" required={true} value={item.street_address} onChange={this.onStreetAddressChange(item).bind(this)}/>
+			<CityFormGroup id="address" required={true} value={item.city ? item.city.name : ""} onChange={this.onCityChange(item).bind(this)}/>
 		</div>
 	}
 
@@ -67,6 +65,24 @@ class AddressListContainer extends React.Component {
 			changedItem.age = event.target.value
 		}
 		return changedItem;
+	}
+
+	onStreetAddressChange( item) {
+		return (event) => {
+			item.street_address = event.target.value
+		}
+	}
+
+	onCityChange( item) {
+		return (city) => {
+			item.city = city
+		}
+	}
+
+	onStreetAddressChange( item) {
+		return (event) => {
+			item.street_address = event.target.value
+		}
 	}
 
 	newItem( ) {
