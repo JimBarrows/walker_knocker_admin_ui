@@ -75,7 +75,7 @@ class AddressListContainer extends React.Component {
 
 	onCityChange( item) {
 		return (city) => {
-			item.city = city
+			item.city = city.id
 		}
 	}
 

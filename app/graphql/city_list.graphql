@@ -1,3 +1,7 @@
-{ cities
-  [{id name abbreviation }]
+query cities($name: String!) {
+  cities(name: $name) {
+    id
+    name
+    abbreviation
+  }
 }
