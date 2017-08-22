@@ -1,3 +1,7 @@
-{ states
-  [{id name abbreviation }]
+query states($name: String!) {
+  states(name: $name) {
+    id
+    name
+    abbreviation
+  }
 }
