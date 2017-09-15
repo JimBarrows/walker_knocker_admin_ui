@@ -4,6 +4,7 @@ import { compose, gql, graphql } from 'react-apollo';
 import { EditableList, FormGroup, NumberFormGroup, PageHeader, TextFormGroup } from "bootstrap-react-components";
 import CityFormGroup from "../components/CityFormGroup";
 import StateFormGroup from "../components/StateFormGroup";
+import ZipCodeFormGroup from "../components/ZipCodeFormGroup";
 import constants from "../../constants";
 import create_gql from "../../graphql/address/create.graphql";
 import list_gql from "../../graphql/address/list.graphql";
@@ -35,9 +36,16 @@ class AddressListContainer extends React.Component {
 
 	formElements( item ) {
 		return <div class="formElements">
-			<TextFormGroup id="street_address" label="Street Address" required={true} value={item.street_address} onChange={this.onStreetAddressChange(item).bind(this)}/>
-			<CityFormGroup id="city" required={true} value={item.city ? item.city.name : ""} onChange={this.onCityChange(item).bind(this)}/>
-			<StateFormGroup id="state" required={true} value={item.state ? item.state.name : ""} onChange={this.onStateChange(item).bind(this)}/>
+			<TextFormGroup id="street_address" label="Street Address" required={true} value={item.street_address} onChange={this.onStreetAddressChange( item ).bind( this )}/>
+			<CityFormGroup id="city" required={true} value={item.city
+				? item.city.name
+				: ""} onChange={this.onCityChange( item ).bind( this )}/>
+			<StateFormGroup id="state" required={true} value={item.state
+				? item.state.name
+				: ""} onChange={this.onStateChange( item ).bind( this )}/>
+			<ZipCodeFormGroup id="zip_code" required={true} value={item.zip_code
+				? item.zip_code.name
+				: ""} onChange={this.onZipCodeChange( item ).bind( this )}/>
 		</div>
 	}
 
@@ -45,37 +53,38 @@ class AddressListContainer extends React.Component {
 		return item.street_address;
 	}
 
-	onChange(event,item) {
-		let changedItem = Object.assign( {}, item)
-		if(event.target.id === 'name') {
-			changedItem.name = event.target.value
-		} else if ( event.target.id === 'age') {
-			changedItem.age = event.target.value
-		}
+	onChange( event, item ) {
+		let changedItem = Object.assign( {}, item );
 		return changedItem;
 	}
 
-	onStreetAddressChange( item) {
-		return (event) => {
+	onStreetAddressChange( item ) {
+		return ( event ) => {
 			item.street_address = event.target.value
 		}
 	}
 
-	onCityChange( item) {
-		return (city) => {
+	onCityChange( item ) {
+		return ( city ) => {
 			item.city = city
 		}
 	}
 
-	onStateChange( item) {
-		return (state) => {
+	onStateChange( item ) {
+		return ( state ) => {
 			item.state = state
 		}
 	}
 
-	onStreetAddressChange( item) {
-		return (event) => {
+	onStreetAddressChange( item ) {
+		return ( event ) => {
 			item.street_address = event.target.value
+		}
+	}
+
+	onZipCodeChange( item ) {
+		return ( zip_code ) => {
+			item.zip_code = zip_code
 		}
 	}
 
@@ -93,17 +102,7 @@ class AddressListContainer extends React.Component {
 
 		let main_display = list.loading
 			? <p>Still loading....</p>
-			: <EditableList addItem={this.addListItem.bind(this)}
-										body={this.body}
-										editFormElements={this.formElements.bind( this )}
-										formElements={this.formElements.bind( this )}
-										header={this.header}
-										id="address_list"
-										list={list.addresses}
-										newItem={this.newItem.bind( this )}
-										onChange={this.onChange.bind(this)}
-										removeItem={this.removeListItem.bind(this)}
-										updateItem={this.updateListItem.bind(this)}/>;
+			: <EditableList addItem={this.addListItem.bind( this )} body={this.body} editFormElements={this.formElements.bind( this )} formElements={this.formElements.bind( this )} header={this.header} id="address_list" list={list.addresses} newItem={this.newItem.bind( this )} onChange={this.onChange.bind( this )} removeItem={this.removeListItem.bind( this )} updateItem={this.updateListItem.bind( this )}/>;
 
 		return (
 			<div id="AddressListPage">
@@ -116,10 +115,10 @@ class AddressListContainer extends React.Component {
 	}
 
 	updateListItem( item ) {
-			let original = this.state.list.findIndex( l => l.id === item.id );
-			let originalList = this.state.list;
-			originalList[original] = Object.assign( {}, originalList[original], item );
-			this.setState({ list: originalList })
+		let original = this.state.list.findIndex( l => l.id === item.id );
+		let originalList = this.state.list;
+		originalList[original] = Object.assign( {}, originalList[original], item );
+		this.setState({ list: originalList })
 	}
 }
 
