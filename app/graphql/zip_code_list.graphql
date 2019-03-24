@@ -1,0 +1,7 @@
+query zip_codes($name: String!) {
+  zip_codes(name: $name) {
+    id
+    name
+    abbreviation
+  }
+}
